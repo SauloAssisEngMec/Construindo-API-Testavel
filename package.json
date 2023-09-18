@@ -1,0 +1,21 @@
+{
+  "name": "book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:integration": "mocha --config test/integration/mocha.config.js test/integration/**/*_spec.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sinon": "^16.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.8",
+    "express": "^4.18.2",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  }
+}
