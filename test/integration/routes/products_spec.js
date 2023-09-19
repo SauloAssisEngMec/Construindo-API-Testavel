@@ -1,6 +1,14 @@
 const { request, expect } = require("../helpers");
 
 describe("Routes: Products", () => {
+  // let request;
+  // let app;
+
+  // before(async () => {
+  //   app = await setupApp();
+  //   request = supertest();
+  // });
+
   const defaultProduct = {
     name: "Default product",
     description: "product description",

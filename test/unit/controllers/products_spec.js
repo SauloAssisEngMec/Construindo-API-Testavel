@@ -4,7 +4,7 @@ const expect = require("../helpers");
 describe("Controllers: Products", () => {
   const defaultProduct = [
     {
-      name: "D products",
+      name: "Default product",
       description: "product description",
       price: 100,
     },
