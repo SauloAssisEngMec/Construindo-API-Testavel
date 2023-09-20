@@ -34,11 +34,12 @@ const mongodbUrl = process.env.URL_MONGO;
 // module.exports = { connect, close };
 ///////////////////////////////////
 
-const connect = async () =>
+const connect = async () => {
   await mongoose.connect(mongodbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+};
 
 // const close = () => mongoose.connection.close();
 
