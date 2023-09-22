@@ -1,6 +1,7 @@
 const express = require("express");
 const ProductsController = require("../controllers/products");
 const router = express.Router();
+const Product = require("../models/product");
 
 // router.get("/", (req, res) =>
 //   res.send([
@@ -12,7 +13,7 @@ const router = express.Router();
 //   ])
 // );
 
-const productsController = new ProductsController();
+const productsController = new ProductsController(Product);
 router.get("/", (req, res) => productsController.get(req, res));
 
 module.exports = router;
