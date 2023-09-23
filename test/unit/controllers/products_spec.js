@@ -80,4 +80,29 @@ describe("Controllers: Products", () => {
       sinon.assert.calledWith(response.send, defaultProduct);
     });
   });
+
+  describe("create()/post product", () => {
+    it("should create and save a new product ", async () => {
+      const requestWithBody = Object.assign(
+        {},
+        { body: defaultProduct[0] },
+        defaultRequest
+      );
+      const response = {
+        send: sinon.spy(),
+        status: sinon.stub(),
+      };
+      class fakeProduct {
+        save() {}
+      }
+
+      response.status.withArgs(201).returns(response);
+      sinon.stub(fakeProduct.prototype, "save").withArgs().resolves();
+
+      const productsController = new ProductsController(fakeProduct);
+
+      await productsController.create(requestWithBody, response);
+      sinon.assert.calledWith(response.send);
+    });
+  });
 });

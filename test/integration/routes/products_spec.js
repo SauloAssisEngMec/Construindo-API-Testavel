@@ -81,4 +81,33 @@ describe("Routes: Products", () => {
       });
     });
   });
+
+  describe(" POST / product", () => {
+    context("when post a product", () => {
+      it("should return a new product and status code 201", (done) => {
+        const customId = "56cb91bdc3464f14678934ba";
+        const newProduct = Object.assign(
+          {},
+          { _id: customId, __v: 0 },
+          defaultProduct
+        );
+        const expectedSavedProduct = {
+          __v: 0,
+          _id: customId,
+          name: "Default product",
+          description: "product description",
+          price: 100,
+        };
+
+        request 
+          .post("/products")
+          .send(newProduct)
+          .end((err, res) => {
+            expect(res.statusCode).to.eql(201);
+            expect(res.body).to.eql(expectedSavedProduct);
+            done(err);
+          });
+      });
+    });
+  });
 });
