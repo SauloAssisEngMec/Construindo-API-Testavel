@@ -20,10 +20,13 @@ describe("Controllers: Products", () => {
   //   6         send: sinon.spy()
   //   7       };
   //   8 +     Product.find = sinon.stub();
+  const defaultRequest = {
+    params: {},
+  };
 
   describe("get() products", () => {
     it("It should call the send function with a list of products", async () => {
-      const request = {};
+      // const request = {};
       const response = {
         send: sinon.spy(),
       };
@@ -37,7 +40,7 @@ describe("Controllers: Products", () => {
       // expect(response.send.calledWith(defaultProduct)).to.be.true;
       const productsController = new ProductsController(Product);
 
-      await productsController.get(request, response);
+      await productsController.get(defaultRequest, response);
 
       sinon.assert.calledWith(response.send, defaultProduct);
     });
@@ -58,6 +61,23 @@ describe("Controllers: Products", () => {
       await productsController.get(request, response);
 
       sinon.assert.calledWith(response.send, "Error");
+    });
+  });
+
+  describe("get by id", () => {
+    it("should return a list of products", async () => {
+      const response = {
+        send: sinon.spy(),
+      };
+
+      Product.find = sinon.stub();
+      Product.find.withArgs({}).resolves(defaultProduct);
+
+      const productsController = new ProductsController(Product);
+
+      await productsController.get(defaultRequest, response);
+
+      sinon.assert.calledWith(response.send, defaultProduct);
     });
   });
 });
