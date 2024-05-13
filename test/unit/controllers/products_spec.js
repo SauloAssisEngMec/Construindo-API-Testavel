@@ -12,14 +12,6 @@ describe("Controllers: Products", () => {
     },
   ];
 
-  // 1   describe('get() products', () => {
-  //   2 -   it('should return a list of products', () => {
-  //   3 +   it('should return a list of products', async() => {
-  //   4       const request = {};
-  //   5       const response = {
-  //   6         send: sinon.spy()
-  //   7       };
-  //   8 +     Product.find = sinon.stub();
   const defaultRequest = {
     params: {},
   };
