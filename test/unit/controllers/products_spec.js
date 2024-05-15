@@ -57,18 +57,35 @@ describe("Controllers: Products", () => {
   });
 
   describe("get by id", () => {
-    it("should return a list of products", async () => {
+    it("should call send with one products", async () => {
+      // const response = {
+      //   send: sinon.spy(),
+      // };
+      // Product.find = sinon.stub();
+      // Product.find.withArgs({}).resolves(defaultProduct);
+      // const productsController = new ProductsController(Product);
+      // await productsController.get(defaultRequest, response);
+      // sinon.assert.calledWith(response.send, defaultProduct);
+      const fakeId = "fakeId";
+
+      const request = {
+        params: {
+          id: fakeId,
+        },
+      };
+
       const response = {
         send: sinon.spy(),
       };
 
-      Product.find = sinon.stub();
-      Product.find.withArgs({}).resolves(defaultProduct);
+      Product.find = sinon.stub(); // Isso substitui a função find do modelo Product por um stub do Sinon
+      Product.find.withArgs({ _id: fakeId }).resolves(defaultProduct);
 
       const productsController = new ProductsController(Product);
+      await productsController.getById(request, response);
 
-      await productsController.get(defaultRequest, response);
-
+      // verificar se uma função (neste caso, response.send) foi chamada
+      //com argumentos específicos (neste caso, defaultProduct).
       sinon.assert.calledWith(response.send, defaultProduct);
     });
   });
@@ -94,7 +111,32 @@ describe("Controllers: Products", () => {
       const productsController = new ProductsController(fakeProduct);
 
       await productsController.create(requestWithBody, response);
-      sinon.assert.calledWith(response.send);
+      sinon.assert.calledWith(response.send); // verifica se a função simulada foi chamada durante o teste. Isso garante que o controlador envie uma resposta ao cliente.
+    });
+
+    context("when an error occurs", () => {
+      it("should return error 422", async () => {
+        const response = {
+          send: sinon.spy(),
+          status: sinon.stub(),
+        };
+
+        class fakeProduct {
+          save() {}
+        }
+
+        response.status.withArgs(422).returns(response);
+
+        sinon
+          .stub(fakeProduct.prototype, "save") // cria um stub para o método save da classe fakeProduct
+          .withArgs()
+          .rejects({ message: "Error" }); //Isso configura o stub para rejeitar a chamada ao método save
+
+        const productsController = new ProductsController(fakeProduct);
+
+        await productsController.create(defaultRequest, response);
+        sinon.assert.calledWith(response.status, 422);
+      });
     });
   });
 });

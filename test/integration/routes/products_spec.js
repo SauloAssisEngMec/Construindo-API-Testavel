@@ -57,7 +57,7 @@ describe("Routes: Products", () => {
   });
 
   describe(" POST / product", () => {
-    context("when post a product", () => {
+    context("when post/create a product", () => {
       it("should return a new product and status code 201", (done) => {
         const customId = "56cb91bdc3464f14678934ba";
         const newProduct = Object.assign(
@@ -75,7 +75,7 @@ describe("Routes: Products", () => {
 
         request
           .post("/products")
-          .send(newProduct)
+          .send(newProduct) // simular um body com informaçoes
           .end((err, res) => {
             expect(res.statusCode).to.eql(201);
             expect(res.body).to.eql(expectedSavedProduct);
@@ -84,4 +84,5 @@ describe("Routes: Products", () => {
       });
     });
   });
+  after(async () => await app.database.connection.close());
 });
