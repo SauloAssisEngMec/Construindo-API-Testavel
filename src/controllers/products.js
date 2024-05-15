@@ -52,6 +52,11 @@ class ProductsController {
       res.status(422).send(err.message);
     }
   }
+
+  async update(req, res) {
+    await this.Product.updateOne({ _id: req.params.id }, req.body);
+    res.sendStatus(200);
+  }
 }
 
 module.exports = ProductsController;

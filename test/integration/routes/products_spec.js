@@ -84,5 +84,25 @@ describe("Routes: Products", () => {
       });
     });
   });
+
+  describe("PUT /products/:id", () => {
+    context("when editing/ updating a product", () => {
+      it("should update the product and return status code 200", (done) => {
+        const customProduct = {
+          name: "new name",
+        };
+        const updatedProduct = Object.assign({}, customProduct, defaultProduct);
+
+        request
+          .put(`/products/${defaultId}`)
+          .send(updatedProduct)
+          .end((err, res) => {
+            expect(res.status).to.eql(200);
+            done(err);
+          });
+      });
+    });
+  });
+
   after(async () => await app.database.connection.close());
 });
