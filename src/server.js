@@ -1,7 +1,6 @@
+// const app = require("./app");
 const setupApp = require("./app");
-
 const port = 3000;
-
 // app.listen(port, () => {
 //   console.log(`Example app listening on port ${port}!`);
 // });
@@ -21,10 +20,7 @@ const port = 3000;
             console.error(err);
             process.exit(1);
           }
-          app.database.connection.close(function () {
-            console.info("Database connection closed!");
-            process.exit(0);
-          });
+          app.database.connection.close("Database connection closed!");
         })
       )
     );

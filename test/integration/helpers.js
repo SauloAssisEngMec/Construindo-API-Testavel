@@ -1,8 +1,9 @@
-const supertest = require("supertest");
-const chai = require("chai");
-const app = require("../../src/app");
+//responsável por inicializar as configurações de testes que serão usadas em todos os testes de integração
 
-const request = supertest(app);
+const supertest = require("supertest");
+const setupApp = require("../../src/app.js");
+const chai = require("chai");
+
 const expect = chai.expect;
 
-module.exports = { request, expect };
+module.exports = { supertest, setupApp, expect };
