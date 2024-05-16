@@ -1,6 +1,6 @@
 const ProductsController = require("../../../src/controllers/products");
 const sinon = require("sinon");
-const expect = require("../helpers");
+
 const Product = require("../../../src/models/product");
 
 describe("Controllers: Products", () => {

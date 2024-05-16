@@ -1,14 +1,17 @@
 const { supertest, setupApp, expect } = require("../helpers");
 const Product = require("../../../src/models/product");
+//const { request } = require("./../global");
 
 describe("Routes: Products", () => {
-  let request;
-  let app;
+  // let request;
+  // let app;
 
-  before(async () => {
-    app = await setupApp();
-    request = supertest(app);
-  });
+  // before(async () => {
+  //   app = await setupApp();
+  //   request = supertest(app);
+  // });
+
+  // after(async () => await app.database.connection.close());
 
   const defaultId = "56cb91bdc3464f14678934ca";
 
@@ -114,6 +117,4 @@ describe("Routes: Products", () => {
       });
     });
   });
-
-  after(async () => await app.database.connection.close());
 });
