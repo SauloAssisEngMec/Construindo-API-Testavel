@@ -102,7 +102,7 @@ describe("Controllers: Products", () => {
         status: sinon.stub(),
       };
       class fakeProduct {
-        save() {}
+        save() {} // pra ser usado no products/ controller do src
       }
 
       response.status.withArgs(201).returns(response);
@@ -163,7 +163,14 @@ describe("Controllers: Products", () => {
       };
 
       class fakeProduct {
-        static updateOne() {}
+        static updateOne() {} //O método updateOne dentro da
+        //classe fakeProduct vai ser um stub. Stubs são objetos que imitam o comportamento de
+        //objetos reais, mas podem ser controlados em um ambiente de teste. Neste caso,
+        //o método updateOne é necessário para simular o comportamento da classe de produto real.
+        //Quando o método update do controlador de produtos é chamado, ele chama o método
+        //updateOne da classe de produto. Como estamos testando o controlador de produtos e
+        //não a classe de produto em si, queremos garantir que o método updateOne seja chamado corretamente.
+        //Portanto, criamos um stub para ele,que podemos controlar e verificar em nosso teste.
       }
 
       const updateOneStub = sinon.stub(fakeProduct, "updateOne");
@@ -177,6 +184,71 @@ describe("Controllers: Products", () => {
       await productsController.update(request, response);
 
       sinon.assert.calledWith(response.sendStatus, 200);
+    });
+
+    context("when an ERROR occurs", () => {
+      it("should return 422 error", async () => {
+        const fakeId = "a-fake-id";
+        const updatedProduct = {
+          _id: fakeId,
+          name: "Updated product",
+          description: "Updated description",
+          price: 150,
+        };
+        const request = {
+          params: {
+            id: fakeId,
+          },
+          body: updatedProduct,
+        };
+        const response = {
+          send: sinon.spy(),
+          status: sinon.stub(),
+        };
+
+        class fakeProduct {
+          static updateOne() {}
+        }
+
+        const updateOneStub = sinon.stub(fakeProduct, "updateOne");
+        updateOneStub
+          .withArgs({ _id: fakeId }, updatedProduct)
+          .rejects({ message: "Error" });
+
+        response.status.withArgs(422).returns(response); //quando o método status for chamado com o argumento 422, ele retorne o próprio response.
+
+        const productsController = new ProductsController(fakeProduct);
+
+        await productsController.update(request, response);
+        sinon.assert.calledWith(response.send, "Error");
+      });
+    });
+  });
+
+  describe("delete() product", () => {
+    it("should return status 204 when the product has been deleted", async () => {
+      const fakeId = "fake-id";
+      const request = {
+        params: {
+          id: fakeId,
+        },
+      };
+      const response = {
+        sendStatus: sinon.spy(),
+      };
+
+      class fakeProduct {
+        static deleteOne() {}
+      }
+
+      const deleteOneStub = sinon.stub(fakeProduct, "deleteOne");
+
+      deleteOneStub.withArgs({ _id: fakeId }).resolves([1]);
+
+      const productsController = new ProductsController(fakeProduct);
+
+      await productsController.remove(request, response);
+      sinon.assert.calledWith(response.sendStatus, 204);
     });
   });
 });

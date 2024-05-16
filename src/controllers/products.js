@@ -1,17 +1,3 @@
-// class productsController {
-//   get(req, res) {
-//     return res.send([
-//       {
-//         name: "Default product",
-//         description: "product description",
-//         price: 100,
-//       },
-//     ]);
-//   }
-// }
-
-// module.exports = productsController;
-
 class ProductsController {
   constructor(Product) {
     this.Product = Product;
@@ -39,9 +25,6 @@ class ProductsController {
     }
   }
 
-  // async create(req, res) {
-  //   return await Promise.resolve(res.send(req.body));
-  // }
   async create(req, res) {
     const product = new this.Product(req.body);
 
@@ -54,8 +37,21 @@ class ProductsController {
   }
 
   async update(req, res) {
-    await this.Product.updateOne({ _id: req.params.id }, req.body);
-    res.sendStatus(200);
+    try {
+      await this.Product.updateOne({ _id: req.params.id }, req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(422).send(err.message);
+    }
+  }
+
+  async remove(req, res) {
+    try {
+      await this.Product.deleteOne({ _id: req.params.id });
+      res.sendStatus(204);
+    } catch (err) {
+      res.sendStatus(422).send(err.message);
+    }
   }
 }
 

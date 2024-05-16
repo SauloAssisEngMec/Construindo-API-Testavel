@@ -19,5 +19,6 @@ router.get("/:id", (req, res) => productsController.getById(req, res));
 // router.post("/"), (req, res) => productsController.post(req, res);
 router.post("/", (req, res) => productsController.create(req, res));
 router.put("/:id", (req, res) => productsController.update(req, res));
+router.delete("/:id", (req, res) => productsController.delete(req, res));
 
 module.exports = router;
