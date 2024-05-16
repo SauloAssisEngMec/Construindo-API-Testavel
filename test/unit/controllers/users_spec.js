@@ -50,4 +50,26 @@ describe("Controller: Users", () => {
       await usersController.get(request, response);
     });
   });
+
+  describe("getById()", () => {
+    it("should call send with one user", async () => {
+      const fakeId = "a-fake-id";
+      const request = {
+        params: {
+          id: fakeId,
+        },
+      };
+      const response = {
+        send: sinon.spy(),
+      };
+
+      User.find = sinon.stub();
+      User.find.withArgs({ _id: fakeId }).resolves(defaultUser);
+
+      const usersController = new UsersController(User);
+
+      await usersController.getById(request, response);
+      sinon.assert.calledWith(response.send, defaultUser);
+    });
+  });
 });

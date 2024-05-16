@@ -33,5 +33,15 @@ describe("Routes: Users", () => {
         done(err);
       });
     });
+
+    context("when an id is specified", (done) => {
+      it("should return 200 with one user", (done) => {
+        request.get(`/users/${defaultId}`).end((err, res) => {
+          expect(res.statusCode).to.eql(200);
+          expect(res.body).to.eql([expectedAdminUser]);
+          done(err);
+        });
+      });
+    });
   });
 });

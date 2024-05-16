@@ -11,6 +11,19 @@ class UsersController {
       res.status(400).send(err.message);
     }
   }
+
+  async getById(req, res) {
+    const {
+      params: { id },
+    } = req;
+
+    try {
+      const user = await this.User.find({ _id: id });
+      res.send(user);
+    } catch (e) {
+      res.status(400).send(e.message);
+    }
+  }
 }
 
 module.exports = UsersController;
