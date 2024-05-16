@@ -250,5 +250,34 @@ describe("Controllers: Products", () => {
       await productsController.remove(request, response);
       sinon.assert.calledWith(response.sendStatus, 204);
     });
+
+    context("when an error occurs", () => {
+      it("should return 400", async () => {
+        const fakeId = "a-fake-id";
+        const request = {
+          params: {
+            id: fakeId,
+          },
+        };
+        const response = {
+          send: sinon.spy(),
+          status: sinon.stub(),
+        };
+
+        class fakeProduct {
+          static deleteOne() {}
+        }
+
+        const deleteOneStub = sinon.stub(fakeProduct, "deleteOne");
+
+        deleteOneStub.withArgs({ _id: fakeId }).rejects({ message: "Error" });
+
+        response.status.withArgs(400).returns(response);
+        const productsController = new ProductsController(fakeProduct);
+
+        await productsController.remove(request, response);
+        sinon.assert.calledWith(response.send, "Error");
+      });
+    });
   });
 });

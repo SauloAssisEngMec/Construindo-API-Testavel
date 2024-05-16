@@ -50,7 +50,7 @@ class ProductsController {
       await this.Product.deleteOne({ _id: req.params.id });
       res.sendStatus(204);
     } catch (err) {
-      res.sendStatus(422).send(err.message);
+      res.status(400).send(err.message);
     }
   }
 }
