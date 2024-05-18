@@ -24,6 +24,17 @@ class UsersController {
       res.status(400).send(e.message);
     }
   }
+
+  async create(req, res) {
+    const user = new this.User(req.body);
+
+    try {
+      await user.save();
+      res.status(201).send(user);
+    } catch (e) {
+      res.status(422).send(e.message);
+    }
+  }
 }
 
 module.exports = UsersController;

@@ -44,4 +44,32 @@ describe("Routes: Users", () => {
       });
     });
   });
+
+  describe("POST /users", () => {
+    context("when posting an user", () => {
+      it("should return a new user with status code 201", (done) => {
+        const customId = "56cb91bdc3464f14678934ba";
+        const newUser = Object.assign(
+          {},
+          { _id: customId, __v: 0 },
+          defaultAdmin
+        );
+        const expectedSavedUser = {
+          _id: customId,
+          name: "Jhon Doe",
+          email: "jhon@mail.com",
+          role: "admin",
+        };
+
+        request
+          .post("/users")
+          .send(newUser)
+          .end((err, res) => {
+            expect(res.statusCode).to.eql(201);
+            expect(res.body).to.eql(expectedSavedUser);
+            done(err);
+          });
+      });
+    });
+  });
 });

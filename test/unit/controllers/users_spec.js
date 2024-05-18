@@ -72,4 +72,59 @@ describe("Controller: Users", () => {
       sinon.assert.calledWith(response.send, defaultUser);
     });
   });
+
+  describe("create()", () => {
+    it("should call send and create one user and send status code 201", async () => {
+      const requestWithBody = Object.assign(
+        {},
+        { body: defaultUser[0] },
+        defaultRequest
+      );
+      const response = {
+        // send é um espião que verifica se foi chamado (usado em linha 102),
+        // e status é um stub que permite definir o comportamento
+        // esperado quando chamado com argumentos específicos (linha linha 95).
+        send: sinon.spy(),
+        status: sinon.stub(),
+      };
+
+      class fakeUser {
+        save() {}
+      }
+
+      response.status.withArgs(201).returns(response);
+      sinon.stub(fakeUser.prototype, "save").withArgs().resolves();
+
+      const usersController = new UsersController(fakeUser);
+
+      await usersController.create(requestWithBody, response);
+
+      sinon.assert.calledWith(response.send);
+    });
+
+    context("when an error occurs", () => {
+      it("should return status code 422", async () => {
+        const response = {
+          send: sinon.spy(),
+          status: sinon.stub(),
+        };
+
+        class fakeUser {
+          save() {}
+        }
+
+        response.status.withArgs(422).returns(response);
+
+        sinon
+          .stub(fakeUser.prototype, "save")
+          .withArgs()
+          .rejects({ message: "Error" });
+
+        const usersController = new UsersController(fakeUser);
+
+        await usersController.create(defaultRequest, response);
+        sinon.assert.calledWith(response.status, 422);
+      });
+    });
+  });
 });
